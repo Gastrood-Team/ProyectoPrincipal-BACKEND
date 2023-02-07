@@ -19,6 +19,10 @@ class Profile
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $bannerPic = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false, onDelete:"CASCADE")]
+    private ?User $user= null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -47,4 +51,8 @@ class Profile
 
         return $this;
     }
+    public function getUser(): ?User
+    {
+         return $this->user;
+     }
 }
