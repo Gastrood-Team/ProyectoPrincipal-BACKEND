@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ProfileRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProfileRepository::class)]
@@ -13,15 +14,27 @@ class Profile
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $username = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $firstName = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $lastName = null;
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $profilePic = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $bannerPic = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false, onDelete:"CASCADE")]
-    private ?User $user= null;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $biography = null;
+
+    // #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    // #[ORM\JoinColumn(nullable: false, onDelete:"CASCADE")]
+    // private ?User $user= null;
 
     public function getId(): ?int
     {
@@ -51,8 +64,62 @@ class Profile
 
         return $this;
     }
-    public function getUser(): ?User
+    // public function getUser(): ?User
+    // {
+    //      return $this->user;
+    // }
+    // public function setUser(User $user): self
+    // {
+    //     $this->user = $user;
+
+    //     return $this;
+    // }
+
+    public function getBiography(): ?string
     {
-         return $this->user;
-     }
+        return $this->biography;
+    }
+
+    public function setBiography(?string $biography): self
+    {
+        $this->biography = $biography;
+
+        return $this;
+    }
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+    
 }
