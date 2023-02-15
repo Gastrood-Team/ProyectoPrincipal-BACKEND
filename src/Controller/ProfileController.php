@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
 
 class ProfileController extends AbstractController
@@ -21,7 +22,7 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/profile/{id}', name: 'profile_show', methods: ['GET'])]
-    public function show(int $id): JsonResponse
+    public function show(int $id, SerializerInterface $serializer): JsonResponse
     {
         $profile = new Profile(); // Instaciamos objeto
         $response = array(); // Infomacion que le devolveremos al cliente
@@ -34,6 +35,10 @@ class ProfileController extends AbstractController
             return new JsonResponse($response, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
+        if($profile == null){
+            $response['message'] = "Profile does not exists";
+            return new JsonResponse($response, Response::HTTP_NOT_FOUND);
+        }
         // Pasamos el perfil al cliente en formato JSON
         $data = [
             'username' => $profile->getUsername(),
@@ -44,6 +49,7 @@ class ProfileController extends AbstractController
             'biography' => $profile->getBiography()
         ];
         $response['profile'] = $data;
+        // $response['profile'] = $serializer->serialize($profile, );
         return new JsonResponse($response, Response::HTTP_OK);
     }
 
