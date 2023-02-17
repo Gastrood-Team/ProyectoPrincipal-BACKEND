@@ -34,17 +34,19 @@ class LoginController extends AbstractController
             $user = $this->userRepository->findOneBy(['email' => $data['email']]);
             // $profile = get_object_vars($user->getProfile());
         } catch (Throwable $th) {
-            $response['message'] = "Error while trying to log in";
-            $response['error'] = $th->getMessage();
+            $response['message'] = "Error";
+            $response['error'] = "An exception occured while trying to login";
             return new JsonResponse($response, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         // Comprobamos si la contraseña ingresada es igual a la cotraseña ecriptada a la BBDD
-        if(!$passwordHasher->isPasswordValid($user, $data['plainPassword'])){
-            $response['message'] = "Password Incorrect";
+        if(!$passwordHasher->isPasswordValid($user, $data['password'])){
+            $response['message'] = "Incorrect password";
+            $response['error'] = "The password you entered is incorrect, please try again";
             return new JsonResponse($response, Response::HTTP_UNAUTHORIZED);
         }
-        $response['message'] = "User logged successfully!";
+        
+        $response['message'] = 'Welcome ' . $user->getProfile()->getUsername();
         // $response['user'] = array($user->getUsername(), $user->getFirstName(), $user->getLastName(), $user->getProfile()->getProfilePic(), $user->getProfile()->getBannerPic(), $user->getProfile()->getBiography());
         return new JsonResponse($response, Response::HTTP_ACCEPTED);
     }

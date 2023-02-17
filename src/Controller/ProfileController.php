@@ -30,13 +30,14 @@ class ProfileController extends AbstractController
         try {
             $profile = $this->profileRepository->findOneBy(['id' => $id]);
         } catch (Throwable $th) {
-            $response['message'] = "Error while querying to the database";
-            $response['error'] = $th->getMessage();
+            $response['message'] = "Error";
+            $response['error'] = "An exception occurred while searching the profile";
             return new JsonResponse($response, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         if($profile == null){
-            $response['message'] = "Profile does not exists";
+            $response['message'] = "Could not find profile";
+            $response['error'] = "The profile your trying to access does not exist";
             return new JsonResponse($response, Response::HTTP_NOT_FOUND);
         }
         // Pasamos el perfil al cliente en formato JSON
@@ -60,12 +61,6 @@ class ProfileController extends AbstractController
         $data = json_decode($request->getContent(), true); // Convertimos los datos enviados por el cliente en un array associativo
         $response = array(); // Infomacion que le devolveremos al cliente
 
-        // Devolvemos un HTTP Response 404 si no encuentra el perfil
-        if($profile == null){
-            $response['message'] = "Error: Could not edit profile";
-            return new JsonResponse($response, Response::HTTP_NOT_FOUND);
-        }
-
         // Actualizamos los datos del perfil
         try {
             $profile->setUsername($data['username']);
@@ -76,8 +71,8 @@ class ProfileController extends AbstractController
             $profile->setBiography($data['biography']);
             $this->profileRepository->save($profile, true);
         } catch (Throwable $th) {
-            $response['message'] = "Error updating profile in database";
-            $response['error'] = $th->getMessage();
+            $response['message'] = "Error";
+            $response['error'] = "An exception occurred while updating profile";
             return new JsonResponse($response, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
