@@ -42,6 +42,7 @@ class ProfileController extends AbstractController
         }
         // Pasamos el perfil al cliente en formato JSON
         $data = [
+            'id' => $profile->getId(),
             'username' => $profile->getUsername(),
             'firstName' => $profile->getFirstName(),
             'lastName' => $profile->getLastName(),
