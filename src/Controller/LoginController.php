@@ -25,14 +25,12 @@ class LoginController extends AbstractController
     public function verify(Request $request, UserPasswordHasherInterface $passwordHasher): JsonResponse
     {
         $user = new User(); // Instanciamos un nuevo objeto 
-        $profile = new Profile();
         $data = json_decode($request->getContent(), true); // Convertimos los datos enviados por el cliente en un array associativo
         $response = array(); // Contendra la informacion que le devolveremos al cliente
 
         // Capturamos las excepciones si ocurre algun error a la hora de buscar el usuario en la BBDD
         try {
             $user = $this->userRepository->findOneBy(['email' => $data['email']]);
-            // $profile = get_object_vars($user->getProfile());
         } catch (Throwable $th) {
             $response['message'] = "Error";
             $response['error'] = "An exception occured while trying to login";
@@ -47,7 +45,6 @@ class LoginController extends AbstractController
         }
         
         $response['message'] = 'Welcome ' . $user->getProfile()->getUsername();
-        // $response['user'] = array($user->getUsername(), $user->getFirstName(), $user->getLastName(), $user->getProfile()->getProfilePic(), $user->getProfile()->getBannerPic(), $user->getProfile()->getBiography());
         return new JsonResponse($response, Response::HTTP_ACCEPTED);
     }
 }

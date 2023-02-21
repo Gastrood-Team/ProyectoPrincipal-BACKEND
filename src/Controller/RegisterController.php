@@ -36,9 +36,9 @@ class RegisterController extends AbstractController
 
         // Capturamos las excepciones si ocurre algun error a la hora de registrar el usuario
         try {
-            $profile->setUsername($data['username']);
-            $profile->setFirstName($data['firstName']);
-            $profile->setLastName($data['lastName']);
+            $profile->setUsername($data['profile']['firstName'] . $data['profile']['lastName']);
+            $profile->setFirstName($data['profile']['firstName']);
+            $profile->setLastName($data['profile']['lastName']);
 
             $user->setEmail($data['email']);
             $user->setPassword($passwordHasher->hashPassword($user, $data['password']));
