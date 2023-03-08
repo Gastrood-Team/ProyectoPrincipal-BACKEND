@@ -48,7 +48,8 @@ class ProfileController extends AbstractController
             'lastName' => $profile->getLastName(),
             'profilePic' => $profile->getProfilePic(),
             'bannerPic' => $profile->getBannerPic(),
-            'biography' => $profile->getBiography()
+            'biography' => $profile->getBiography(),
+            'website' => $profile->getWebsite()
         ];
         $response['profile'] = $data;
         // $response['profile'] = $serializer->serialize($profile, );
@@ -70,10 +71,11 @@ class ProfileController extends AbstractController
             $profile->setProfilePic($data['profilePic']);
             $profile->setBannerPic($data['bannerPic']);
             $profile->setBiography($data['biography']);
+            $profile->setWebsite($data['website']);
             $this->profileRepository->save($profile, true);
         } catch (Throwable $th) {
             $response['message'] = "Error";
-            $response['error'] = "An exception occurred while updating profile";
+            $response['error'] = $th->getMessage();
             return new JsonResponse($response, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
@@ -84,7 +86,8 @@ class ProfileController extends AbstractController
             'lastName' => $profile->getLastName(),
             'profilePic' => $profile->getProfilePic(),
             'bannerPic' => $profile->getBannerPic(),
-            'biography' => $profile->getBiography()
+            'biography' => $profile->getBiography(),
+            'website' => $profile->getWebsite()
         ];
         $response['message'] = "Profile updated successfully!";
         $response['profile'] = $data;
