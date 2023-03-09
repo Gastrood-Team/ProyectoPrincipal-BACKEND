@@ -56,8 +56,8 @@ class User implements PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $createdAt = null;
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
 
     public function __construct()
     {
@@ -295,12 +295,12 @@ class User implements PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
