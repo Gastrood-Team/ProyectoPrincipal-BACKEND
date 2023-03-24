@@ -1,0 +1,11 @@
+monolog:
+    channels: ['recipe_request','default']
+    handlers:
+        main:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+        recipe_request:
+            type: stream
+            path: "%kernel.logs_dir%/recipe_request.log"
+            level: error
