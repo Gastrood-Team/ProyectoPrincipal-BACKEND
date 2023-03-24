@@ -44,9 +44,9 @@ class RecipeService
 
         foreach ($recipes as $recipe) {
             $result[] = [
-                'id' => $recipe->getId(),
-                'name' => $recipe->getName(),
-                'description' => $recipe->getDescription(),
+                'recipeId' => $recipe->getId(),
+                'recipeName' => $recipe->getName(),
+                'recipeDescription' => $recipe->getDescription(),
             ];
         }
         return $result;
