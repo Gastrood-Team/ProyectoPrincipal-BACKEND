@@ -5,7 +5,6 @@ namespace App\Service;
 use App\Entity\Recipe;
 use App\Repository\RecipeRepository;
 use Cloudinary\Cloudinary;
-use Cloudinary\Transformation\Argument\Text\Text;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class RecipeService
@@ -27,7 +26,7 @@ class RecipeService
         $recipe = new Recipe();
         $recipe->setName($name);
         $recipe->setDescription($description);
-        $recipe->setImage($uploadedFile['public_id']);
+        $recipe->setImage($uploadedFile['public_url']);
 
         $this->recipeRepository->save($recipe, true);
 
@@ -47,6 +46,7 @@ class RecipeService
                 'recipeId' => $recipe->getId(),
                 'recipeName' => $recipe->getName(),
                 'recipeDescription' => $recipe->getDescription(),
+                'recipeImage' => $recipe->getImage(),
             ];
         }
         return $result;
@@ -71,7 +71,7 @@ class RecipeService
         if($file){
             $this->cloudinary->uploadApi()->destroy($recipe->getImage());
             $uploadedFile = $this->cloudinary->uploadApi()->upload($file->getRealPath());
-            $recipe->setImage($uploadedFile['public_id']);
+            $recipe->setImage($uploadedFile['url']);
         }
         
         $this->recipeRepository->save($recipe, true);
