@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class RecipeController extends AbstractController
 {
@@ -18,7 +18,7 @@ class RecipeController extends AbstractController
     private $logger;
     private  $normalizer;
 
-    public function __construct(ObjectNormalizer $normalizer, RecipeService $recipeService, LoggerInterface $logger){
+    public function __construct(NormalizerInterface $normalizer, RecipeService $recipeService, LoggerInterface $logger){
         $this->normalizer = $normalizer;
         $this->recipeService = $recipeService;
         $this->logger = $logger;
@@ -73,7 +73,6 @@ class RecipeController extends AbstractController
             return new JsonResponse($response, Response::HTTP_INTERNAL_SERVER_ERROR);
 
         }
-
         $response['status'] = 'success';
         $response['data'] = $recipe;
         return new JsonResponse($response, Response::HTTP_OK);
@@ -82,13 +81,18 @@ class RecipeController extends AbstractController
     #[Route('/recipes', name: 'crete_recipe', methods:'POST')]
     public function create(Request $request): JsonResponse
     { 
-        $name = $request->get('recipeName');
-        $description = $request->get('recipeDescription');
-        $imageFile = $request->files->get('recipeImage');  
+        $data = $request->request->all();
+        $file = $request->files->get('recipeImage');  
+
+        if ($file && !in_array($file->getClientOriginalExtension(), ['jpg', 'jpeg', 'png'])) {
+            $response['status'] = 'error';
+            $response['message'] = "The file you're prividing is not a valid format";
+            return new JsonResponse($response, Response::HTTP_BAD_REQUEST);
+        }
 
         try {
 
-            $recipe = $this->recipeService->createRecipe($name,$description,$imageFile);
+            $recipe = $this->recipeService->createRecipe($data,$file);
 
         } catch (\Exception $e) {
 
@@ -112,7 +116,7 @@ class RecipeController extends AbstractController
         $data = $request->request->all();
         $file = $request->files->get('recipeImage');
 
-        if ($file && !in_array($file->getClientOriginalExtension(), ['jpg', 'jpeg', 'png'])) {
+        if (!$file || !in_array($file->getClientOriginalExtension(), ['jpg', 'jpeg', 'png'])) {
             $response['status'] = 'error';
             $response['message'] = "The file you're prividing is not a valid format";
             return new JsonResponse($response, Response::HTTP_BAD_REQUEST);
