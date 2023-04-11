@@ -30,7 +30,7 @@ class RecipeTypeController extends AbstractController
 
         try {
 
-            $recipes = $this->recipeTypeService->getRecipeTypes();
+            $recipesTypes = $this->recipeTypeService->getRecipeTypes();
 
         } catch (\Exception $e) {        
         
@@ -44,7 +44,7 @@ class RecipeTypeController extends AbstractController
         }
 
         $response['status'] = 'success';
-        $response['data'] = $recipes;
+        $response['data'] = $recipesTypes;
         return new JsonResponse($response, Response::HTTP_OK);
 
     }

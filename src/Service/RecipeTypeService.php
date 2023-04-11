@@ -26,7 +26,7 @@ class RecipeTypeService{
         $recipeType->setRecipeTypeName($data['recipeTypeName']);
         $recipeType->setRecipeTypeImage($uploadedFile['url']);
 
-        // $this->recipeTypeRepository->save($recipeType, true);
+        $this->recipeTypeRepository->save($recipeType, true);
 
         return $recipeType;
     }

@@ -59,13 +59,23 @@ class RecipeService
         return $result;
     }
 
-    public function getPaginatedRecipesByType(int $page): array
+    public function getPaginatedRecipesByType(int $page, string $recipeType): array
     {
         $result = [];
         $limit = 10;
         $offset = ($page - 1) * $limit;
 
-        $recipes = $this->recipeRepository->findBy([], [], $limit, $offset);
+        // Retrieves recipes based of the recipe type
+        $queryBuilder = $this->recipeRepository->createQueryBuilder('recipe')
+            ->join('recipe.types', 'types')
+            ->where('types.recipeTypeName = :type')
+            ->setParameter('type', $recipeType)
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->orderBy('recipe.id', 'ASC');
+
+        $recipes = $queryBuilder->getQuery()->getResult();
+        // $recipes = $this->recipeRepository->findBy([], [], $limit, $offset);
 
         foreach ($recipes as $recipe) {
             $result[] = [

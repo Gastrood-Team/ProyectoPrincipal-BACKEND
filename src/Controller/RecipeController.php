@@ -28,10 +28,11 @@ class RecipeController extends AbstractController
     public function listRecipes(Request $request): JsonResponse
     {
         $page = $request->query->getInt('page', 1);
+        $recipeType = $request->query->get('type');
 
         try {
 
-            $recipes = $this->recipeService->getPaginatedRecipesByType($page);
+            $recipes = $this->recipeService->getPaginatedRecipesByType($page, $recipeType);
 
         } catch (\Exception $e) {        
         
@@ -123,22 +124,22 @@ class RecipeController extends AbstractController
         }
 
         try {
-
+            
             $updatedRecipe = $this->recipeService->updateRecipe($data, $file, $id);
-            $response['status'] = 'success';
-            $response['data'] = $this->normalizer->normalize($updatedRecipe);
-            return new JsonResponse($response, Response::HTTP_OK);
 
         } catch (\Exception $e) {
-
+            
             $this->logger->error($e->getMessage());
-
+            
             $response['status'] = 'error';
             $response['message'] = 'Something went wrong while updating the recipe, please try again later.';
             $response['error'] = $e->getMessage();
             return new JsonResponse($response, Response::HTTP_INTERNAL_SERVER_ERROR);
-
+            
         }  
+        $response['status'] = 'success';
+        $response['data'] = $this->normalizer->normalize($updatedRecipe);
+        return new JsonResponse($response, Response::HTTP_OK);
         
     }
 
