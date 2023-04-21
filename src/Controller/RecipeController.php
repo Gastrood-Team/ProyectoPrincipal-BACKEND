@@ -83,7 +83,7 @@ class RecipeController extends AbstractController
     public function create(Request $request): JsonResponse
     { 
         $data = $request->request->all();
-        $file = $request->files->get('recipeImage');  
+        $file = $request->files->get('image');  
 
         if ($file && !in_array($file->getClientOriginalExtension(), ['jpg', 'jpeg', 'png'])) {
             $response['status'] = 'error';
@@ -97,7 +97,7 @@ class RecipeController extends AbstractController
 
         } catch (\Exception $e) {
 
-            $this->logger->error($e->getMessage());
+            // $this->logger->error($e->getMessage());
 
             $response['status'] = 'error';
             $response['message'] = 'Something went wrong while creating the recipe, please try again later.';
@@ -115,7 +115,7 @@ class RecipeController extends AbstractController
     public function update(Request $request, int $id): JsonResponse{
 
         $data = $request->request->all();
-        $file = $request->files->get('recipeImage');
+        $file = $request->files->get('image');
 
         if (!$file || !in_array($file->getClientOriginalExtension(), ['jpg', 'jpeg', 'png'])) {
             $response['status'] = 'error';
@@ -129,7 +129,7 @@ class RecipeController extends AbstractController
 
         } catch (\Exception $e) {
             
-            $this->logger->error($e->getMessage());
+            // $this->logger->error($e->getMessage());
             
             $response['status'] = 'error';
             $response['message'] = 'Something went wrong while updating the recipe, please try again later.';
@@ -153,7 +153,7 @@ class RecipeController extends AbstractController
         
         } catch (\Exception $e) {
             
-            $this->logger->error($e->getMessage());
+            // $this->logger->error($e->getMessage());
 
             $response['status'] = 'error';
             $response['message'] = 'Something went wrong while deleting the recipe, please try again later.';

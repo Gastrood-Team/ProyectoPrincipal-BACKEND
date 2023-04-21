@@ -18,17 +18,23 @@ class RecipeTypeService{
         $this->cloudinary = $cloudinary;
     }
 
-    public function createRecipeType(array $data, UploadedFile $imageFile) : RecipeType {
+    public function createRecipeType(array $data, UploadedFile $imageFile) : array {
 
         $uploadedFile = $this->cloudinary->uploadApi()->upload($imageFile->getRealPath());
 
         $recipeType = new RecipeType();
-        $recipeType->setRecipeTypeName($data['recipeTypeName']);
-        $recipeType->setRecipeTypeImage($uploadedFile['url']);
+        $recipeType->setRecipeTypeName($data['name']);
+        $recipeType->setRecipeTypeImage($uploadedFile['public_id']);
 
         $this->recipeTypeRepository->save($recipeType, true);
 
-        return $recipeType;
+        $result = [
+            'id' => $recipeType->getId(),
+            'name' => $recipeType->getRecipeTypeName(),
+            'image' => $this->cloudinary->adminApi()->asset($recipeType->getRecipeTypeImage())['url']
+        ];
+
+        return $result;
     }
 
     public function getRecipeTypes() : array 
@@ -38,9 +44,9 @@ class RecipeTypeService{
 
         foreach ($recipeTypes as $type) {
             $result[] = [
-                'recipeTypeId' => $type->getId(),
-                'recipeTypeName' => $type->getRecipeTypeName(),
-                'recipeTypeImage' => $type->getRecipeTypeImage()
+                'id' => $type->getId(),
+                'name' => $type->getRecipeTypeName(),
+                'image' => $this->cloudinary->adminApi()->asset($type->getRecipeTypeImage())['url']
             ];
         }
 

@@ -34,7 +34,7 @@ class RecipeTypeController extends AbstractController
 
         } catch (\Exception $e) {        
         
-            $this->logger->error($e->getMessage());
+            // $this->logger->error($e->getMessage());
 
             $response['status'] = 'error';
             $response['message'] = 'Something went wrong while loading the recipe types, please try again later.';
@@ -53,7 +53,7 @@ class RecipeTypeController extends AbstractController
     public function create(Request $request): JsonResponse {
 
         $data = $request->request->all();
-        $file = $request->files->get('recipeTypeImage');
+        $file = $request->files->get('image');
 
         try {
 
@@ -61,7 +61,7 @@ class RecipeTypeController extends AbstractController
         
         } catch (\Exception $e) {
 
-            $this->logger->error($e->getMessage());
+            // $this->logger->error($e->getMessage());
 
             $response['status'] = 'error';
             $response['message'] = 'Something went wrong while creating the recipe type, please try again later.';
@@ -85,7 +85,7 @@ class RecipeTypeController extends AbstractController
         
         } catch (\Exception $e) {
             
-            $this->logger->error($e->getMessage());
+            // $this->logger->error($e->getMessage());
 
             $response['status'] = 'error';
             $response['message'] = 'Something went wrong while deleting the recipe type, please try again later.';
@@ -95,7 +95,7 @@ class RecipeTypeController extends AbstractController
         }
 
         $response['status'] = 'success';
-        $response['message'] = 'Recype type has been deleted';
+        $response['message'] = 'Recipe type has been deleted';
         return new JsonResponse($response, Response::HTTP_OK);
     }
     
