@@ -3,10 +3,14 @@
 namespace App\Service;
 
 use App\Entity\Recipe;
+use App\Entity\Profile;
+use App\Entity\User;
 use App\Repository\RecipeRepository;
 use App\Repository\RecipeTypeRepository;
+use App\Repository\UserRepository;
 use Cloudinary\Cloudinary;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class RecipeService
 {
@@ -14,22 +18,36 @@ class RecipeService
     private $recipeRepository;
     private $recipeTypeRepository;
     private $cloudinary;
+    private $tokenStorage;
+    private $userRepository;
 
-    public function __construct(RecipeRepository $recipeRepository, RecipeTypeRepository $recipeTypeRepository, Cloudinary $cloudinary)
+    public function __construct(
+        RecipeRepository $recipeRepository, 
+        RecipeTypeRepository $recipeTypeRepository, 
+        UserRepository $userRepository,
+        Cloudinary $cloudinary, 
+        TokenStorageInterface $tokenStorage)
     {
         $this->recipeRepository = $recipeRepository;
         $this->recipeTypeRepository = $recipeTypeRepository;
         $this->cloudinary = $cloudinary;
+        $this->tokenStorage = $tokenStorage;
+        $this->userRepository = $userRepository;
     }
 
     public function createRecipe(array $data, UploadedFile $imageFile): array
     {
+        $email = $this->tokenStorage->getToken()->getUserIdentifier();
+        $user = $this->userRepository->findOneBy(['email' => $email]);
+        $profile = $user->getProfile();
+
         $uploadedFile = $this->cloudinary->uploadApi()->upload($imageFile->getRealPath());
 
         $recipe = new Recipe();
         $recipe->setName($data['name']);
         $recipe->setDescription($data['description']);
         $recipe->setImage($uploadedFile['public_id']);
+        $recipe->setProfile($profile);
 
         foreach ($data['typesId'] as $id) {
             $recipeType = $this->recipeTypeRepository->find($id);

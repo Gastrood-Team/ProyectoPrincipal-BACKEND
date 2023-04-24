@@ -31,6 +31,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $state = true;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Profile $profile = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -109,6 +113,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setState(bool $state): self
     {
         $this->state = $state;
+
+        return $this;
+    }
+
+    public function getProfile(): ?profile
+    {
+        return $this->profile;
+    }
+
+    public function setProfile(profile $profile): self
+    {
+        $this->profile = $profile;
 
         return $this;
     }

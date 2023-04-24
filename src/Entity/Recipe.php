@@ -30,6 +30,10 @@ class Recipe
     #[ORM\ManyToMany(targetEntity: RecipeType::class, inversedBy: 'recipes')]
     private Collection $types;
 
+    #[ORM\ManyToOne(inversedBy: 'recipes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Profile $profile = null;
+
     public function __construct()
     {
         $this->types = new ArrayCollection();
@@ -103,6 +107,18 @@ class Recipe
     public function removeAllTypes(): self
     {
         $this->types->clear();
+        return $this;
+    }
+
+    public function getProfile(): ?Profile
+    {
+        return $this->profile;
+    }
+
+    public function setProfile(?Profile $profile): self
+    {
+        $this->profile = $profile;
+
         return $this;
     }
 }

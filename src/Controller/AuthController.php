@@ -29,16 +29,16 @@ class AuthController extends AbstractController
     {
         $data = $request->request->all();
         $email = $request->get('email');
-
+        
         // Temp - Should be in the bussines layer
-        $user = $_repository->findOneBy(["email" => $email]);
-
+        $user = $_repository->findOneBy(['email' => $email]);
+        
         if($user){
             $response['status'] = 'conflict';
             $response['message'] = 'The email is already in use';
             return new JsonResponse($response, Response::HTTP_CONFLICT);
         }
-
+        
         try {
 
             $this->_authService->register($data);
