@@ -44,7 +44,7 @@ class AuthController extends AbstractController
             $this->_authService->register($data);
 
             $response['status'] = 'success';
-            $response['message'] = 'Thank you for joining us, Chef!';
+            $response['message'] = 'Let your culinary adventure begin!';
             return new JsonResponse($response, Response::HTTP_CREATED);
             
         } catch (\Exception $e) {

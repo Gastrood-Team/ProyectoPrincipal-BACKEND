@@ -50,9 +50,14 @@ class AuthService{
 
         $user = $this->_userRepository->findOneBy(['email' => $email]);
 
-        if (!$user || !$this->_passwordHasher->isPasswordValid($user, $password)) {
-            throw new Exception("Incorrect Passowrd", 401);
+        if(!$user){
+            throw new Exception("Emails is not registered", 400);
         }
+        
+        if (!$this->_passwordHasher->isPasswordValid($user, $password)) {
+            throw new Exception("Incorrect password", 401);
+        }
+
 
         $token = $this->_jwtManger->create($user);
 
