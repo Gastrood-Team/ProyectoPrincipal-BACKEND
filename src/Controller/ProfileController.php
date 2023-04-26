@@ -28,12 +28,6 @@ class ProfileController extends AbstractController
         try {
 
             $profile = $this->_profileService->getProfile($id);
-
-            if($profile === null){
-                $response['status'] = 'error';
-                $response['message'] = "The profile you're trying to access was not found";
-                return new JsonResponse($response, Response::HTTP_NOT_FOUND);
-            }
             
             $response['status'] = 'success';
             $response['data'] = $profile;
@@ -41,8 +35,7 @@ class ProfileController extends AbstractController
 
         } catch (\Exception $e) {
             $response['status'] = 'error';
-            $response['message'] = 'Something went wrong while loading the profile, please try again later.';
-            $response['error'] = $e->getMessage();
+            $response['message'] = $e->getMessage();
             return new JsonResponse($response, Response::HTTP_INTERNAL_SERVER_ERROR);
 
         }

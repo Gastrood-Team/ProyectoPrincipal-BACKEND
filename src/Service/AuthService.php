@@ -27,6 +27,14 @@ class AuthService{
 
     public function register(array $data): void
     {
+        $email = $data['email'];
+        
+        $userExist = $this->_userRepository->findOneBy(['email' => $email]);
+        
+        if($userExist){
+            throw new Exception("The email is already in use", 409);
+        }
+
         $user = new User();
         $profile = new Profile();
         
@@ -36,7 +44,7 @@ class AuthService{
         
         $user->setEmail($data['email']);
         $user->setPassword($this->_passwordHasher->hashPassword($user, $data['password']));
-        // $user->setRoles(["USER_ROLE"]);
+        $user->setRoles(["ROLE_USER"]);
         $user->setProfile($profile);
 
         $this->_profileRepository->save($profile, true);        
@@ -51,7 +59,7 @@ class AuthService{
         $user = $this->_userRepository->findOneBy(['email' => $email]);
 
         if(!$user){
-            throw new Exception("Emails is not registered", 400);
+            throw new Exception("Email is not registered", 400);
         }
         
         if (!$this->_passwordHasher->isPasswordValid($user, $password)) {

@@ -28,16 +28,6 @@ class AuthController extends AbstractController
     public function sigup(Request $request, UserRepository $_repository): JsonResponse
     {
         $data = $request->request->all();
-        $email = $request->get('email');
-        
-        // Temp - Should be in the bussines layer
-        $user = $_repository->findOneBy(['email' => $email]);
-        
-        if($user){
-            $response['status'] = 'conflict';
-            $response['message'] = 'The email is already in use';
-            return new JsonResponse($response, Response::HTTP_CONFLICT);
-        }
         
         try {
 
@@ -50,8 +40,7 @@ class AuthController extends AbstractController
         } catch (\Exception $e) {
 
             $response['status'] = 'error';
-            $response['message'] = 'Something went wrong while updating the signing up, please try again later.';
-            $response['error'] = $e->getMessage();
+            $response['message'] = $e->getMessage();
             return new JsonResponse($response, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

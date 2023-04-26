@@ -9,6 +9,7 @@ use App\Repository\RecipeRepository;
 use App\Repository\RecipeTypeRepository;
 use App\Repository\UserRepository;
 use Cloudinary\Cloudinary;
+use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -109,6 +110,10 @@ class RecipeService
     public function getRecipeDetails(int $id): ?array
     {
         $recipe = $this->recipeRepository->find($id);
+
+        if($recipe === null){
+            throw new Exception("The recipe you're trying to access was not found", 404);
+        }
 
         $result = [
             'id' => $recipe->getId(),

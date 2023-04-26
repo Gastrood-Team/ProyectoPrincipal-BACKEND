@@ -58,19 +58,12 @@ class RecipeController extends AbstractController
 
             $recipe = $this->recipeService->getRecipeDetails($id);
 
-            if($recipe === null){
-                $response['status'] = 'error';
-                $response['message'] = "The recipe you're trying to access was not found";
-                return new JsonResponse($response, Response::HTTP_NOT_FOUND);
-            }
-
         } catch (\Exception $e) {
 
             $this->logger->error($e->getMessage());
 
             $response['status'] = 'error';
-            $response['message'] = 'Something went wrong while loading the recipe details, please try again later.';
-            $response['error'] = $e->getMessage();
+            $response['message'] = $e->getMessage();
             return new JsonResponse($response, Response::HTTP_INTERNAL_SERVER_ERROR);
 
         }

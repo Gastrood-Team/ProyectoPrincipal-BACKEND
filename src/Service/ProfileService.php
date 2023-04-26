@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Profile;
 use App\Repository\ProfileRepository;
 use Cloudinary\Cloudinary;
+use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ProfileService{
@@ -21,6 +22,10 @@ class ProfileService{
     public function getProfile(int $id): ?array
     {
         $profile = $this->_profileRepository->find($id);
+
+        if($profile === null){
+            throw new Exception("The profile you're trying to access was not found", 404);
+        }
 
         $result = [
             'id' => $profile->getId(),
