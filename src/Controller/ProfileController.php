@@ -22,12 +22,12 @@ class ProfileController extends AbstractController
         $this->_logger = $logger;
     }
 
-    #[Route('profile/{id}', name: 'get-profile', methods:'GET')]
-    public function getProfile(int $id): JsonResponse
+    #[Route('profile/{username}', name: 'get-profile', methods:'GET')]
+    public function getProfile(string $username): JsonResponse
     {
         try {
 
-            $profile = $this->_profileService->getProfile($id);
+            $profile = $this->_profileService->getProfile($username);
             
             $response['status'] = 'success';
             $response['data'] = $profile;

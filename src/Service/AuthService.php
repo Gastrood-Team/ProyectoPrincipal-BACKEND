@@ -27,12 +27,16 @@ class AuthService{
 
     public function register(array $data): void
     {
-        $email = $data['email'];
         
-        $userExist = $this->_userRepository->findOneBy(['email' => $email]);
+        $email = $this->_userRepository->findOneBy(['email' => $data['email']]);
+        $username = $this->_profileRepository->findOneBy(['username' => $data['username']]);
         
-        if($userExist){
+        if($email){
             throw new Exception("The email is already in use", 409);
+        }
+
+        if($username){
+            throw new Exception("The username is already in use", 409);
         }
 
         $user = new User();

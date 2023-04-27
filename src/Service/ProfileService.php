@@ -19,9 +19,9 @@ class ProfileService{
         $this->_cloudinary = $cloudinary;
     }
 
-    public function getProfile(int $id): ?array
+    public function getProfile(string $username): ?array
     {
-        $profile = $this->_profileRepository->find($id);
+        $profile = $this->_profileRepository->findOneBy(['username' => $username]);
 
         if($profile === null){
             throw new Exception("The profile you're trying to access was not found", 404);
