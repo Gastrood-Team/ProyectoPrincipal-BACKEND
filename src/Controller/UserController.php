@@ -2,31 +2,29 @@
 
 namespace App\Controller;
 
-use App\Service\ProfileService;
-use Psr\Log\LoggerInterface;
+use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class ProfileController extends AbstractController
+class UserController extends AbstractController
 {
-    private $_profileService;
+    private $_userService;
 
-    public function __construct(ProfileService $profileService){
-        $this->_profileService = $profileService;
+    public function __construct(UserService $userService){
+        $this->_userService = $userService;
     }
 
-    #[Route('profile/{username}', name: 'get-profile', methods:'GET')]
-    public function getProfile(string $username): JsonResponse
+    #[Route('user', name: 'get-user', methods:'GET')]
+    public function getLoggedUser(): JsonResponse
     {
         try {
 
-            $profile = $this->_profileService->getProfile($username);
+            $user = $this->_userService->getLoggedUser();
             
             $response['status'] = 'success';
-            $response['data'] = $profile;
+            $response['data'] = $user;
             return new JsonResponse($response, Response::HTTP_OK);
 
         } catch (\Exception $e) {
@@ -36,6 +34,4 @@ class ProfileController extends AbstractController
 
         }
     }
-
-
 }

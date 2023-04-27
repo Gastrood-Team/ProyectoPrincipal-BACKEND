@@ -2,11 +2,9 @@
 
 namespace App\Service;
 
-use App\Entity\Profile;
 use App\Repository\ProfileRepository;
 use Cloudinary\Cloudinary;
 use Exception;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ProfileService{
 
