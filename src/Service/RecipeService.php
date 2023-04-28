@@ -3,8 +3,6 @@
 namespace App\Service;
 
 use App\Entity\Recipe;
-use App\Entity\Profile;
-use App\Entity\User;
 use App\Repository\RecipeRepository;
 use App\Repository\RecipeTypeRepository;
 use App\Repository\UserRepository;
