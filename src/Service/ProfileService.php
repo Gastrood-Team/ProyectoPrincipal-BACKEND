@@ -32,12 +32,12 @@ class ProfileService{
             'lasttName' => $profile->getLastName(),
         ];
 
-        if($profile->getProfilePic()){
-            $result['profilePic'] = $this->_cloudinary->adminApi()->asset($profile->getProfilePic())['url'];
+        if($profile->getProfileImageUrl()){
+            $result['profilePic'] = $profile->getProfileImageUrl();
         }
 
-        if($profile->getBannerPic()){
-            $result['bannerPic'] = $this->_cloudinary->adminApi()->asset($profile->getBannerPic())['url'];
+        if($profile->getBannerImageUrl()){
+            $result['bannerPic'] = $profile->getBannerImageUrl();
 
         }
 
@@ -46,7 +46,7 @@ class ProfileService{
                 'id' => $recipe->getId(),
                 'name' => $recipe->getName(),
                 'description' => $recipe->getDescription(),
-                'image' => $this->_cloudinary->adminApi()->asset($recipe->getImage())['url']
+                'image' => $recipe->getImageUrl()
             ];
 
             $result['recipes'][] = $recipe;

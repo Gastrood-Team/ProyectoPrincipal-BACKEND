@@ -17,10 +17,13 @@ class RecipeType
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $recipeTypeName = null;
+    private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $recipeTypeImage = null;
+    private ?string $imageId = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $imageUrl = null;
 
     #[ORM\ManyToMany(targetEntity: Recipe::class, mappedBy: 'types')]
     private Collection $recipes;
@@ -35,26 +38,38 @@ class RecipeType
         return $this->id;
     }
 
-    public function getRecipeTypeName(): ?string
+    public function getName(): ?string
     {
-        return $this->recipeTypeName;
+        return $this->name;
     }
 
-    public function setRecipeTypeName(string $recipeTypeName): self
+    public function setName(string $name): self
     {
-        $this->recipeTypeName = $recipeTypeName;
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getRecipeTypeImage(): ?string
+    public function getImageId(): ?string
     {
-        return $this->recipeTypeImage;
+        return $this->imageId;
     }
 
-    public function setRecipeTypeImage(string $recipeTypeImage): self
+    public function setImageId(string $imageId): self
     {
-        $this->recipeTypeImage = $recipeTypeImage;
+        $this->imageId = $imageId;
+
+        return $this;
+    }
+
+    public function getImageUrl(): ?string
+    {
+        return $this->imageUrl;
+    }
+
+    public function setImageUrl(string $imageUrl): self
+    {
+        $this->imageUrl = $imageUrl;
 
         return $this;
     }
