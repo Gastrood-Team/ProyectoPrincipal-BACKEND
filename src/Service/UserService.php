@@ -29,11 +29,10 @@ class UserService{
             'email' => $user->getEmail(),
             'profileId' => $profile->getId(),
             'username' => $profile->getUsername(),
-            'profilePic' => $profile->getProfilePic(),
         ];
 
-        if($profile->getProfilePic() != null){
-            $result = ['profilePic' => $this->cloudinary->adminApi()->asset($profile->getProfilePic())['url']];
+        if($profile->getProfileImageUrl() != null){
+            $result = ['profilePic' => $profile->getProfileImageUrl()];
         }
         return $result;
     }
