@@ -3,16 +3,19 @@
 namespace App\Service;
 
 use App\Repository\UserRepository;
+use Cloudinary\Cloudinary;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class UserService{
 
     private $_userRepository;
     private $_tokenStorage;
+    private $cloudinary;
 
-    public function __construct(UserRepository $userRepository, TokenStorageInterface $tokenStorage){
+    public function __construct(Cloudinary $cloudinary, UserRepository $userRepository, TokenStorageInterface $tokenStorage){
         $this->_userRepository = $userRepository;
         $this->_tokenStorage = $tokenStorage;
+        $this->cloudinary = $cloudinary;
     }
 
     public function getLoggedUser(): array
@@ -26,7 +29,12 @@ class UserService{
             'email' => $user->getEmail(),
             'profileId' => $profile->getId(),
             'username' => $profile->getUsername(),
+            'profilePic' => $profile->getProfilePic(),
         ];
+
+        if($profile->getProfilePic() != null){
+            $result = ['profilePic' => $this->cloudinary->adminApi()->asset($profile->getProfilePic())['url']];
+        }
         return $result;
     }
 }

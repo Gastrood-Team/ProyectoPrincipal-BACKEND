@@ -7,7 +7,8 @@ use App\Repository\RecipeTypeRepository;
 use Cloudinary\Cloudinary;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class RecipeTypeService{
+class RecipeTypeService
+{
 
     private $cloudinary;
     private $recipeTypeRepository;
@@ -18,26 +19,28 @@ class RecipeTypeService{
         $this->cloudinary = $cloudinary;
     }
 
-    public function createRecipeType(array $data, UploadedFile $imageFile) : array {
+    public function createRecipeType(array $data, UploadedFile $imageFile): array
+    {
 
         $uploadedFile = $this->cloudinary->uploadApi()->upload($imageFile->getRealPath());
 
         $recipeType = new RecipeType();
-        $recipeType->setRecipeTypeName($data['name']);
-        $recipeType->setRecipeTypeImage($uploadedFile['public_id']);
+        $recipeType->setName($data['name']);
+        $recipeType->setImageId($uploadedFile['public_id']);
+        $recipeType->setImageUrl($uploadedFile['url']);
 
         $this->recipeTypeRepository->save($recipeType, true);
 
         $result = [
             'id' => $recipeType->getId(),
-            'name' => $recipeType->getRecipeTypeName(),
-            'image' => $this->cloudinary->adminApi()->asset($recipeType->getRecipeTypeImage())['url']
+            'name' => $recipeType->getName(),
+            'image' => $recipeType->getImageUrl()
         ];
 
         return $result;
     }
 
-    public function getRecipeTypes() : array 
+    public function getRecipeTypes(): array
     {
         $result = [];
         $recipeTypes = $this->recipeTypeRepository->findAll();
@@ -45,20 +48,18 @@ class RecipeTypeService{
         foreach ($recipeTypes as $type) {
             $result[] = [
                 'id' => $type->getId(),
-                'name' => $type->getRecipeTypeName(),
-                'image' => $this->cloudinary->adminApi()->asset($type->getRecipeTypeImage())['url']
+                'name' => $type->getName(),
+                'image' => $type->getImageUrl()
             ];
         }
 
         return $result;
     }
 
-    public function deleteRecipeTypeById($id){
+    public function deleteRecipeTypeById($id)
+    {
         $recipeType = $this->recipeTypeRepository->find($id);
-        $this->cloudinary->uploadApi()->destroy($recipeType->getRecipeTypeImage());
-        $this->recipeTypeRepository->remove($recipeType,true);
+        $this->cloudinary->uploadApi()->destroy($recipeType->getImageId());
+        $this->recipeTypeRepository->remove($recipeType, true);
     }
-
 }
-
-?>

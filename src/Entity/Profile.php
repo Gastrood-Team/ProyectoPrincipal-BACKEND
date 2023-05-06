@@ -24,14 +24,20 @@ class Profile
     #[ORM\Column(length: 255)]
     private ?string $username = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $profilePic = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $bannerPic = null;
-
     #[ORM\OneToMany(mappedBy: 'profile', targetEntity: Recipe::class)]
     private Collection $recipes;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $profileImageId = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $profileImageUrl = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $bannerImageUrl = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $bannerImageId = null;
 
     public function __construct()
     {
@@ -78,31 +84,6 @@ class Profile
 
         return $this;
     }
-
-    public function getProfilePic(): ?string
-    {
-        return $this->profilePic;
-    }
-
-    public function setProfilePic(string $profilePic): self
-    {
-        $this->profilePic = $profilePic;
-
-        return $this;
-    }
-
-    public function getBannerPic(): ?string
-    {
-        return $this->bannerPic;
-    }
-
-    public function setBannerPic(?string $bannerPic): self
-    {
-        $this->bannerPic = $bannerPic;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Recipe>
      */
@@ -129,6 +110,54 @@ class Profile
                 $recipe->setProfile(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProfileImageId(): ?string
+    {
+        return $this->profileImageId;
+    }
+
+    public function setProfileImageId(?string $profileImageId): self
+    {
+        $this->profileImageId = $profileImageId;
+
+        return $this;
+    }
+
+    public function getProfileImageUrl(): ?string
+    {
+        return $this->profileImageUrl;
+    }
+
+    public function setProfileImageUrl(?string $profileImageUrl): self
+    {
+        $this->profileImageUrl = $profileImageUrl;
+
+        return $this;
+    }
+
+    public function getBannerImageUrl(): ?string
+    {
+        return $this->bannerImageUrl;
+    }
+
+    public function setBannerImageUrl(?string $bannerImageUrl): self
+    {
+        $this->bannerImageUrl = $bannerImageUrl;
+
+        return $this;
+    }
+
+    public function getBannerImageId(): ?string
+    {
+        return $this->bannerImageId;
+    }
+
+    public function setBannerImageId(?string $bannerImageId): self
+    {
+        $this->bannerImageId = $bannerImageId;
 
         return $this;
     }

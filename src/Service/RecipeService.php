@@ -21,12 +21,12 @@ class RecipeService
     private $userRepository;
 
     public function __construct(
-        RecipeRepository $recipeRepository, 
-        RecipeTypeRepository $recipeTypeRepository, 
+        RecipeRepository $recipeRepository,
+        RecipeTypeRepository $recipeTypeRepository,
         UserRepository $userRepository,
-        Cloudinary $cloudinary, 
-        TokenStorageInterface $tokenStorage)
-    {
+        Cloudinary $cloudinary,
+        TokenStorageInterface $tokenStorage
+    ) {
         $this->recipeRepository = $recipeRepository;
         $this->recipeTypeRepository = $recipeTypeRepository;
         $this->cloudinary = $cloudinary;
@@ -45,7 +45,8 @@ class RecipeService
         $recipe = new Recipe();
         $recipe->setName($data['name']);
         $recipe->setDescription($data['description']);
-        $recipe->setImage($uploadedFile['public_id']);
+        $recipe->setImageId($uploadedFile['public_id']);
+        $recipe->setImageUrl($uploadedFile['url']);
         $recipe->setProfile($profile);
 
         foreach ($data['typesId'] as $id) {
@@ -61,13 +62,13 @@ class RecipeService
             'id' => $recipe->getId(),
             'name' => $recipe->getName(),
             'description' => $recipe->getDescription(),
-            'image' => $this->cloudinary->adminApi()->asset($recipe->getImage())['url']
+            'image' => $recipe->getImageUrl()
         ];
 
         foreach ($recipe->getTypes() as $recipeType) {
             $recipeTypeData = [
                 'id' => $recipeType->getId(),
-                'name' => $recipeType->getRecipeTypeName(),
+                'name' => $recipeType->getName(),
             ];
 
             $result['types'][] = $recipeTypeData;
@@ -99,17 +100,17 @@ class RecipeService
                 'id' => $recipe->getId(),
                 'name' => $recipe->getName(),
                 'description' => $recipe->getDescription(),
-                'Image' => $this->cloudinary->adminApi()->asset($recipe->getImage())['url']
+                'image' => $recipe->getImageUrl()
             ];
         }
         return $result;
-    }  
+    }
 
     public function getRecipeDetails(int $id): ?array
     {
         $recipe = $this->recipeRepository->find($id);
 
-        if($recipe === null){
+        if ($recipe === null) {
             throw new Exception("The recipe you're trying to access was not found", 404);
         }
 
@@ -117,13 +118,13 @@ class RecipeService
             'id' => $recipe->getId(),
             'name' => $recipe->getName(),
             'description' => $recipe->getDescription(),
-            'image' => $this->cloudinary->adminApi()->asset($recipe->getImage())['url']
+            'image' => $recipe->getImageUrl()
         ];
 
         foreach ($recipe->getTypes() as $recipeType) {
             $recipeTypeData = [
                 'id' => $recipeType->getId(),
-                'name' => $recipeType->getRecipeTypeName(),
+                'name' => $recipeType->getName(),
             ];
 
             $result['types'][] = $recipeTypeData;
@@ -152,9 +153,10 @@ class RecipeService
         }
 
         if ($file) {
-            $this->cloudinary->uploadApi()->destroy($recipe->getImage());
+            $this->cloudinary->uploadApi()->destroy($recipe->getImageId());
             $uploadedFile = $this->cloudinary->uploadApi()->upload($file->getRealPath());
-            $recipe->setImage($uploadedFile['public_id']);
+            $recipe->setImageId($uploadedFile['public_id']);
+            $recipe->setImageId($uploadedFile['url']);
         }
 
         $this->recipeRepository->save($recipe, true);
@@ -163,13 +165,13 @@ class RecipeService
             'id' => $recipe->getId(),
             'name' => $recipe->getName(),
             'description' => $recipe->getDescription(),
-            'image' => $this->cloudinary->adminApi()->asset($recipe->getImage())['url']
+            'image' => $recipe->getImageUrl()
         ];
 
         foreach ($recipe->getTypes() as $recipeType) {
             $recipeTypeData = [
                 'id' => $recipeType->getId(),
-                'name' => $recipeType->getRecipeTypeName(),
+                'name' => $recipeType->getName(),
             ];
 
             $result['types'][] = $recipeTypeData;
@@ -181,7 +183,7 @@ class RecipeService
     public function deleteRecipeById($id)
     {
         $recipe = $this->recipeRepository->find($id);
-        $this->cloudinary->uploadApi()->destroy($recipe->getImage());
+        $this->cloudinary->uploadApi()->destroy($recipe->getImageId());
         $this->recipeRepository->remove($recipe, true);
     }
 }

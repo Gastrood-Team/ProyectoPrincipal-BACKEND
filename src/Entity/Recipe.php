@@ -7,8 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
 class Recipe
@@ -25,7 +23,7 @@ class Recipe
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $image = null;
+    private ?string $imageId = null;
 
     #[ORM\ManyToMany(targetEntity: RecipeType::class, inversedBy: 'recipes')]
     private Collection $types;
@@ -33,6 +31,9 @@ class Recipe
     #[ORM\ManyToOne(inversedBy: 'recipes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Profile $profile = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $imageUrl = null;
 
     public function __construct()
     {
@@ -68,18 +69,29 @@ class Recipe
         return $this;
     }
 
-    public function getImage(): ?string
+    public function getImageId(): ?string
     {
-        return $this->image;
+        return $this->imageId;
     }
 
-    public function setImage(string $image): self
+    public function setImageId(string $imageId): self
     {
-        $this->image = $image;
+        $this->imageId = $imageId;
 
         return $this;
     }
 
+    public function getImageUrl(): ?string
+    {
+        return $this->imageUrl;
+    }
+
+    public function setImageUrl(string $imageUrl): self
+    {
+        $this->imageUrl = $imageUrl;
+
+        return $this;
+    }
     /**
      * @return Collection<int, RecipeType>
      */
@@ -121,4 +133,5 @@ class Recipe
 
         return $this;
     }
+
 }
