@@ -27,12 +27,13 @@ class UserService{
         $result = [
             'id' => $user->getId(),
             'email' => $user->getEmail(),
-            'profileId' => $profile->getId(),
             'username' => $profile->getUsername(),
+            'firstName' => $profile->getFirstName(),
+            'lastName' => $profile->getLastName(),
         ];
 
         if($profile->getProfileImageUrl() != null){
-            $result = ['profilePic' => $profile->getProfileImageUrl()];
+            $result = ['profileImage' => $profile->getProfileImageUrl()];
         }
         return $result;
     }

@@ -43,8 +43,8 @@ class AuthService{
         $profile = new Profile();
         
         $profile->setUsername($data['username']);
-        $profile->setFirstName($data['firstName']);
-        $profile->setLastname($data['lastName']);
+        $profile->setFirstName(ucfirst($data['firstName']));
+        $profile->setLastname(ucfirst($data['lastName']));
         
         $user->setEmail($data['email']);
         $user->setPassword($this->_passwordHasher->hashPassword($user, $data['password']));
