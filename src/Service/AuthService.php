@@ -70,7 +70,6 @@ class AuthService{
             throw new Exception("Incorrect password", 401);
         }
 
-
         $token = $this->_jwtManger->create($user);
 
         return new JsonResponse(['token' => $token]);

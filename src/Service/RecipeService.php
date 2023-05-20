@@ -43,7 +43,7 @@ class RecipeService
         $uploadedFile = $this->cloudinary->uploadApi()->upload($imageFile->getRealPath());
 
         $recipe = new Recipe();
-        $recipe->setName($data['name']);
+        $recipe->setName(strtolower($data['name']));
         $recipe->setDescription($data['description']);
         $recipe->setImageId($uploadedFile['public_id']);
         $recipe->setImageUrl($uploadedFile['url']);
@@ -86,7 +86,7 @@ class RecipeService
         // Retrieves recipes based of the recipe type
         $queryBuilder = $this->recipeRepository->createQueryBuilder('recipe')
             ->join('recipe.types', 'types')
-            ->where('types.recipeTypeName = :type')
+            ->where('types.name = :type')
             ->setParameter('type', $recipeType)
             ->setMaxResults($limit)
             ->setFirstResult($offset)
