@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ProfileRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProfileRepository::class)]
@@ -38,6 +39,12 @@ class Profile
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $bannerImageId = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $biography = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $websiteUrl = null;
 
     public function __construct()
     {
@@ -158,6 +165,30 @@ class Profile
     public function setBannerImageId(?string $bannerImageId): self
     {
         $this->bannerImageId = $bannerImageId;
+
+        return $this;
+    }
+
+    public function getBiography(): ?string
+    {
+        return $this->biography;
+    }
+
+    public function setBiography(?string $biography): self
+    {
+        $this->biography = $biography;
+
+        return $this;
+    }
+
+    public function getWebsiteUrl(): ?string
+    {
+        return $this->websiteUrl;
+    }
+
+    public function setWebsiteUrl(?string $websiteUrl): self
+    {
+        $this->websiteUrl = $websiteUrl;
 
         return $this;
     }

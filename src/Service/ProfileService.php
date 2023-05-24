@@ -30,6 +30,8 @@ class ProfileService{
             'username' => $profile->getUsername(),
             'firstName' => $profile->getFirstName(),
             'lasttName' => $profile->getLastName(),
+            'biography' => $profile->getBiography(),
+            'websiteUrl' => $profile->getWebsiteUrl(),
         ];
 
         if($profile->getProfileImageUrl()){

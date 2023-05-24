@@ -96,13 +96,24 @@ class RecipeService
         // $recipes = $this->recipeRepository->findBy([], [], $limit, $offset);
 
         foreach ($recipes as $recipe) {
-            $result[] = [
+            $recipeData = [
                 'id' => $recipe->getId(),
                 'name' => $recipe->getName(),
                 'description' => $recipe->getDescription(),
-                'image' => $recipe->getImageUrl()
+                'image' => $recipe->getImageUrl(),
+                'types' => []
             ];
+            foreach ($recipe->getTypes() as $recipeType) {
+                $recipeTypeData = [
+                    'id' => $recipeType->getId(),
+                    'name' => $recipeType->getName(),
+                ];
+        
+                $recipeData['types'][] = $recipeTypeData;
+            }
+            $result[] = $recipeData;
         }
+
         return $result;
     }
 
@@ -118,8 +129,13 @@ class RecipeService
             'id' => $recipe->getId(),
             'name' => $recipe->getName(),
             'description' => $recipe->getDescription(),
-            'image' => $recipe->getImageUrl()
+            'image' => $recipe->getImageUrl(),
+            'username' => $recipe->getProfile()->getUsername(),
+            'firstName' => $recipe->getProfile()->getFirstName(),
+            'lastName' => $recipe->getProfile()->getLastName()
         ];
+
+        
 
         foreach ($recipe->getTypes() as $recipeType) {
             $recipeTypeData = [
