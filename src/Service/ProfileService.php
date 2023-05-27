@@ -29,7 +29,7 @@ class ProfileService{
             'id' => $profile->getId(),
             'username' => $profile->getUsername(),
             'firstName' => $profile->getFirstName(),
-            'lasttName' => $profile->getLastName(),
+            'lastName' => $profile->getLastName(),
             'biography' => $profile->getBiography(),
             'websiteUrl' => $profile->getWebsiteUrl(),
         ];
