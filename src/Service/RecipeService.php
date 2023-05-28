@@ -172,7 +172,7 @@ class RecipeService
             $this->cloudinary->uploadApi()->destroy($recipe->getImageId());
             $uploadedFile = $this->cloudinary->uploadApi()->upload($file->getRealPath());
             $recipe->setImageId($uploadedFile['public_id']);
-            $recipe->setImageId($uploadedFile['url']);
+            $recipe->setImageUrl($uploadedFile['url']);
         }
 
         $this->recipeRepository->save($recipe, true);
