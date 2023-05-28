@@ -130,6 +130,7 @@ class RecipeController extends AbstractController
             return new JsonResponse($response, Response::HTTP_INTERNAL_SERVER_ERROR);
             
         }  
+
         $response['status'] = 'success';
         $response['message'] = 'Your recipe has been updated';
         $response['data'] = $this->normalizer->normalize($updatedRecipe);
