@@ -24,6 +24,7 @@ class UserService{
         $user = $this->_userRepository->findOneBy(['email' => $email]);
         $profile = $user->getProfile();
 
+        
         $result = [
             'id' => $user->getId(),
             'email' => $user->getEmail(),
@@ -31,12 +32,7 @@ class UserService{
             'firstName' => $profile->getFirstName(),
             'lastName' => $profile->getLastName(),
         ];
-
-        if($profile->getProfileImageUrl() != null){
-            $result = ['profileImage' => $profile->getProfileImageUrl()];
-        }
+        
         return $result;
     }
 }
-
-?>
