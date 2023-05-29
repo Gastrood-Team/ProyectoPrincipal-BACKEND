@@ -58,7 +58,7 @@ class ProfileService{
         return $result;
     }
 
-    public function update(array $data, UploadedFile $profileFile, UploadedFile $bannerFile, string $username): void
+    public function update(array $data, UploadedFile $profileFile = null, UploadedFile $bannerFile = null, string $username): void
     {
         $profile = $this->_profileRepository->findOneBy(['username' => $username]);
 

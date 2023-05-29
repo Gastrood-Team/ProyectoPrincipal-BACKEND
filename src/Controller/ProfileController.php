@@ -46,10 +46,20 @@ class ProfileController extends AbstractController
         $profileFile = $request->files->get('profileImg');
         $bannerFile = $request->files->get('bannerImg');
 
-        if (!$profileFile || !$bannerFile || !in_array($profileFile->getClientOriginalExtension(), ['jpg', 'jpeg', 'png']) || !in_array($bannerFile->getClientOriginalExtension(), ['jpg', 'jpeg', 'png'])) {
-            $response['status'] = 'error';
-            $response['message'] = "The file you're prividing is not a valid format";
-            return new JsonResponse($response, Response::HTTP_BAD_REQUEST);
+        if($profileFile){
+            if (!$profileFile|| !in_array($profileFile->getClientOriginalExtension(), ['jpg', 'jpeg', 'png'])) {
+                $response['status'] = 'error';
+                $response['message'] = "The file you're prividing is not a valid format";
+                return new JsonResponse($response, Response::HTTP_BAD_REQUEST);
+            }
+        }
+
+        if($bannerFile){
+            if (!$bannerFile || !in_array($bannerFile->getClientOriginalExtension(), ['jpg', 'jpeg', 'png'])) {
+                $response['status'] = 'error';
+                $response['message'] = "The file you're prividing is not a valid format";
+                return new JsonResponse($response, Response::HTTP_BAD_REQUEST);
+            }
         }
 
         try {
