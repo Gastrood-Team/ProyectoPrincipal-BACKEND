@@ -80,7 +80,7 @@ class RecipeService
     public function getPaginatedRecipesByType(int $page, string $recipeType): array
     {
         $result = [];
-        $limit = 10;
+        $limit = 8;
         $offset = ($page - 1) * $limit;
 
         // Retrieves recipes based of the recipe type
